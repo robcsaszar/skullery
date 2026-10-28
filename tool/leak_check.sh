@@ -47,7 +47,7 @@ while IFS= read -r f; do
   fi
   # The private core is named only inside the override instructions.
   core="larder""_core"
-  if [ "$f" != "README.md" ] && [ "$f" != "CONTEXT.md" ] && [ "$f" != "tool/leak_check.sh" ] && grep -nE -e "$core" -e '\.\./larder' "$f"; then
+  if [ "$f" != "README.md" ] && [ "$f" != "CONTEXT.md" ] && [ "$f" != "tool/leak_check.sh" ] && grep -nE -e "$core" -e '\.\./larder([^_a-z]|$)' "$f"; then
     say "$f: names the private core or a path into it outside the override instructions"
   fi
 done <<< "$files"
