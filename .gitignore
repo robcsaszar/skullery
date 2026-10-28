@@ -1,0 +1,7 @@
+.dart_tool/
+build/
+.DS_Store
+# Written by hand for the real-core build; never committed. See README.md.
+pubspec_overrides.yaml
+# Copied in for the real-core build of the site.
+site/web/images/legacy/

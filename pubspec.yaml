@@ -1,0 +1,10 @@
+name: skullery
+description: The public half of Skullery, a recipe site in Dart. Site, apps, shared UI, the larder read interface and a stub core.
+publish_to: none
+environment:
+  sdk: ^3.13.0
+# Workspace members join this list as they get code:
+#   packages/larder_api, packages/larder_stub, packages/ui, site, apps/*
+workspace: []
+dev_dependencies:
+  lints: 6.1.0
