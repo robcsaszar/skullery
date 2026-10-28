@@ -1,50 +1,68 @@
-# Skullery
+<!-- Banner: docs/media/banner-light.svg and docs/media/banner-dark.svg, each 1200 by 300. -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/banner-dark.svg">
+  <img src="docs/media/banner-light.svg" alt="Skullery" width="1200" height="300">
+</picture>
 
-Skullery is a recipe site: recipes written by chefs, cooked and forked by cooks, each with ingredient groups, steps, notes and yields, grouped by kitchen, meal, category and label. The site is static Dart (Jaspr) on Cloudflare Workers, the dynamic part is a Dart container on Fly.io, the database is Turso (libSQL), images live on Cloudflare R2, search is Pagefind. It replaces the old Jekyll site at theskullery.net, which forwards to skullery.net at launch. This repo is MIT and built in public.
+Skullery is a recipe site that grows into a platform: recipes written by chefs, cooked and forked by cooks.
+
+[![ci](https://github.com/robcsaszar/skullery/actions/workflows/ci.yml/badge.svg)](https://github.com/robcsaszar/skullery/actions/workflows/ci.yml)
+[![code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE.md)
+[![recipes: CC BY-SA 4.0](https://img.shields.io/badge/recipes-CC%20BY--SA%204.0-blue.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
+
+## Why
+
+Recipes are open content. The 164 recipes from the old site, theskullery.net, built in 2020 on Jekyll, carry over under CC BY-SA 4.0. Anyone can read them without an account, copy them, and build on them, as long as they share alike.
+
+A fork is the idea. A cook takes a chef's recipe, changes it, cooks it, and merges the change back into a recipe of their own. The original stays as it was. Every version is kept, so a recipe can be followed back to where it came from.
+
+Paper is a first-class input. A recipe can be printed as a form, written on at the stove, photographed, and read back as a fork. The kitchen does not have to go through a screen.
+
+## Today
+
+- The repo builds on a clean clone with a stub core of five invented recipes, with no account and no secret.
+- Built against the real core, the static site renders the 164 recipes from the old site as plain HTML: one page per recipe, chef, kitchen, meal, category and label.
+- Tests run on every push: `dart analyze`, `dart format`, `dart test` per package, a leak check and the clean-clone build.
+- Nothing is deployed yet. The old site stays up until launch and then forwards to skullery.net.
+
+## Planned
+
+In this order:
+
+1. The new site.
+2. Accounts and submissions.
+3. Forks: a cook forks a recipe, changes it, merges it back into a recipe of their own.
+4. Apps, in Flutter.
+5. A cooking dictionary.
+6. An assistant that edits a recipe by voice or in plain English.
+7. Paper forks: print a recipe as a form, write on it, photograph it, get a fork.
+
+Principles that hold through the list: no ads, no bloat text, no login to read, simplicity first, no vendor lock-in, few usage-based bills, and build in public with the core closed. One cook, Rob, builds it.
+
+## Build it
+
+```
+git clone https://github.com/robcsaszar/skullery.git && cd skullery
+dart pub get
+dart run site/tool/build.dart
+```
+
+That builds the site from the stub core into site/build/jaspr. The build with the real core takes one environment variable and a gitignored override file; CONTEXT.md describes it under "Build with the real core".
+
+## How this repo relates to the core
 
 The core lives in a private repo named larder. This repo builds and runs with the stub core.
 
-## Layout
+The core holds the data model, the recipe versioning and the merge. It stays closed so the platform has one owner for the parts that carry trust. This repo holds the site, the apps, the shared UI, `larder_api` (the read interface the frontends use) and `larder_stub` (a core with invented recipes). Nothing here imports the private core; a contributor never needs it.
 
-```
-site/                 the Jaspr static site
-apps/                 the Flutter apps
-packages/ui           shared UI for the site and the apps
-packages/larder_api   the public read interface of the core and the types a frontend renders
-packages/larder_stub  a stub core with invented recipes, so this repo builds alone
-packages/larder_select  the one seam that picks the core: the stub here, the real core through the override below
-docs/                 legacy-site.md (what the old site was), process-gaps.md
-tool/                 gate.sh, leak_check.sh, stub_build_check.sh
-```
+## Contributing
 
-## Build with the stub core
+Pull requests are welcome for the site, the apps, the UI and the interface. Build with the stub, keep the gate green, one pull request per part. CONTRIBUTING.md has the steps, the checks and what a contributor cannot touch. Rob reviews every pull request alone, so small ones land faster.
 
-```
-dart pub get
-tool/gate.sh          # dart analyze, dart format check, dart test per package
-```
+## Licence
 
-That is the whole setup. A clean clone needs Dart and nothing else; `tool/stub_build_check.sh` proves it by cloning this repo into a temp folder and running the gate there.
+The code in this repo is MIT, see [LICENSE.md](LICENSE.md). The recipes are [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-## Build the site
+## Credits
 
-```
-dart run site/tool/build.dart                                        # stub core, 5 invented recipes
-LARDER=sqlite LARDER_PATH=../larder dart run site/tool/build.dart    # real core, the parsed recipes
-```
-
-The output is plain HTML, CSS and JavaScript in site/build/jaspr. Serve it with any static server.
-
-## Build with the real core
-
-The site chooses its core through one package, `larder_select` (packages/larder_select), which opens the stub. The private repo has a package of the same name over the real core, larder_core. `LARDER=sqlite` makes the build tool write a gitignored `pubspec_overrides.yaml` at the repo root that points the name at that folder, and copy the legacy images into site/web/images/legacy (gitignored):
-
-```
-dependency_overrides:
-  larder_select:
-    path: ../larder/packages/select
-```
-
-`LARDER_PATH` is the private repo's path relative to this repo root. The stub build removes the override and the images again. Never commit the override or a pubspec.lock resolved with it; the leak check fails on both.
-
-CONTEXT.md says what Skullery is. CLAUDE.md says how a Claude Code session works here.
+Built by Rob ([NHG.design](https://nhg.design)). The recipes come from the old site, [theskullery.net](https://theskullery.net).
