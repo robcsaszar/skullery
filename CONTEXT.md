@@ -77,4 +77,4 @@ recipe, chef (not author), kitchen (not cuisine or tag), category, meal, label, 
 ## Known gaps
 
 - packages/ui and apps/ have no code yet.
-- No CI yet. The gate runs locally; CI comes with the first code (see docs/process-gaps.md).
+- No deploy yet. The first is a preview of the static site on a workers.dev address, on a branch with a pull request. main is protected: pull request, the ci check, no force push, no deletion.

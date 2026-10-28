@@ -55,7 +55,7 @@ Read CONTEXT.md first. It says what Skullery is; this file says how to work in i
 
 - Conventional commits: `type(scope): what`, body says why. Types: feat fix chore docs refactor test build ci perf revert. Scopes: site, apps, ui, api, stub, docs, ci, tooling.
 - One commit per logical part.
-- Until the first deploy: push to main. From the first deploy: branch, pull request, green tests, merge. Nothing live without a pull request.
+- Branch, pull request, green ci, merge. Rob merges. Nothing live without a pull request. main is protected on GitHub, and the no-push-main hook blocks a push to main and a force push from a session.
 - Use `gh` for GitHub. Never force-push main. Never `git reset --hard`, `git checkout --` or `git stash` on a tree another agent is editing.
 - The session owns git. Subagents never commit, stage or stash.
 - Before every push: `tool/leak_check.sh` clean, `tool/stub_build_check.sh` green.
