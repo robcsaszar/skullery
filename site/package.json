@@ -1,0 +1,8 @@
+{
+  "name": "skullery-site",
+  "private": true,
+  "description": "Deploy tooling for the Skullery static site: wrangler as a dev dependency, no global install.",
+  "devDependencies": {
+    "wrangler": "4.154.0"
+  }
+}

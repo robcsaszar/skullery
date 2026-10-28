@@ -6,7 +6,8 @@
 /// LARDER=sqlite writes the gitignored pubspec_overrides.yaml at the repo
 /// root (pointing larder_select at the private core's package of that
 /// name) and copies the legacy images into site/web/images/legacy. The
-/// stub build removes both. Then `dart pub get` and the Jaspr static build.
+/// stub build removes both. Then `dart pub get`, the Jaspr static build and
+/// the `_headers` file that marks every page noindex.
 library;
 
 import 'dart:io';
@@ -57,7 +58,26 @@ Future<void> main() async {
   stdout.writeln('core: $mode');
   await _run('dart', ['pub', 'get'], root.path);
   await _run('dart', ['run', 'jaspr_cli:jaspr', 'build'], site.path);
+  _prune(Directory('${site.path}/build/jaspr'));
+  File('${site.path}/build/jaspr/_headers').writeAsStringSync(headersFile);
   stdout.writeln('built site/build/jaspr with the $mode core');
+}
+
+/// The `_headers` file of the build output. Every deploy today is a preview,
+/// so every path carries noindex and no search engine lists it.
+const headersFile = '/*\n  X-Robots-Tag: noindex\n';
+
+/// Removes what the build leaves in the output that is not the site: its
+/// package config and manifest, and the asset copies of every package on the
+/// machine under packages/. Nothing in the HTML, CSS or JavaScript refers to
+/// them, and the package copies hold files that never ship.
+void _prune(Directory out) {
+  for (final name in ['.dart_tool', 'packages']) {
+    final d = Directory('${out.path}/$name');
+    if (d.existsSync()) d.deleteSync(recursive: true);
+  }
+  final manifest = File('${out.path}/.build.manifest');
+  if (manifest.existsSync()) manifest.deleteSync();
 }
 
 Future<void> _copyTree(Directory from, Directory to) async {
