@@ -1,0 +1,33 @@
+name: Bug
+description: Something does not work the way the repo says it does.
+labels: [bug]
+body:
+  - type: textarea
+    id: did
+    attributes:
+      label: What you did
+      description: The commands or the steps, in order.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+      description: The output, the error text or the page you saw.
+    validations:
+      required: true
+  - type: dropdown
+    id: build
+    attributes:
+      label: Which build
+      options:
+        - stub core (the default)
+        - real core (LARDER=sqlite)
+    validations:
+      required: true

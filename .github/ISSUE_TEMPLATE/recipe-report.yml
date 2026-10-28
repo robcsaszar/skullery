@@ -1,0 +1,30 @@
+name: Recipe report
+description: A recipe that is incorrect, fake, malicious, obscene or harmful.
+labels: [recipe-report]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Recipe URL
+      placeholder: https://skullery.net/recipe/...
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is wrong with it
+      options:
+        - incorrect
+        - fake
+        - malicious
+        - obscene
+        - harmful
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: The reason
+      description: What is wrong, and how you know. A source helps.
+    validations:
+      required: true

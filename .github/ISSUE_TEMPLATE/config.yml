@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security
+    url: https://github.com/robcsaszar/skullery/blob/main/SECURITY.md
+    about: A vulnerability goes to robert@nhg.design, not to a public issue.
