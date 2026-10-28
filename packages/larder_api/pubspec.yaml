@@ -1,0 +1,10 @@
+name: larder_api
+description: The public read interface of Skullery's core, the larder, and the immutable types a frontend renders.
+version: 0.1.0
+publish_to: none
+resolution: workspace
+environment:
+  sdk: ^3.13.0
+dev_dependencies:
+  lints: 6.1.0
+  test: 1.33.0
