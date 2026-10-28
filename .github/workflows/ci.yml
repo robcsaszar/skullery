@@ -1,0 +1,21 @@
+# The gate on every push and pull request: analyze, format check, tests per
+# package, leak check, and the clean-clone build with the stub core.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+        with:
+          sdk: 3.13.7
+      - run: dart pub get
+      - run: tool/gate.sh
+      - run: tool/leak_check.sh
+      - run: tool/stub_build_check.sh
