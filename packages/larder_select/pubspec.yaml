@@ -1,0 +1,10 @@
+name: larder_select
+description: Which core the site builds against. This package opens the stub; a gitignored pubspec override swaps it for the private core's package of the same name.
+publish_to: none
+environment:
+  sdk: ^3.13.0
+dependencies:
+  larder_api:
+    path: ../larder_api
+  larder_stub:
+    path: ../larder_stub

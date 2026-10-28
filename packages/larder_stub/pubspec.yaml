@@ -10,4 +10,4 @@ dependencies:
     path: ../larder_api
 dev_dependencies:
   lints: 6.1.0
-  test: 1.33.0
+  test: 1.31.1

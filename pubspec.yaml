@@ -3,9 +3,12 @@ description: The public half of Skullery, a recipe site in Dart. Site, apps, sha
 publish_to: none
 environment:
   sdk: ^3.13.0
-# Workspace members join this list as they get code (next: packages/ui, site, apps/*).
+# Workspace members join this list as they get code (next: packages/ui, apps/*).
+# packages/larder_select is a plain path dependency of the site, not a member:
+# pub can override a path dependency, not a workspace member.
 workspace:
   - packages/larder_api
   - packages/larder_stub
+  - site
 dev_dependencies:
   lints: 6.1.0

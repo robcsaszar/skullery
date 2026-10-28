@@ -21,12 +21,13 @@ apps/                 Flutter apps; one folder per app
 packages/ui           shared UI for the site and the apps
 packages/larder_api   pure Dart: the Larder interface and the immutable types (Recipe, IngredientGroup, Ingredient, Amount, Step, Note, Yield, Image, Chef, Category, Meal, Kitchen, Label)
 packages/larder_stub  a Larder with a handful of invented recipes
+packages/larder_select  openLarder() and legacyImagesDir() over the stub; not a workspace member, so a pubspec override can swap it
 docs/                 legacy-site.md, process-gaps.md, handoff/
 tool/                 gate.sh, leak_check.sh, stub_build_check.sh
 .claude/              agents, skills and hooks for Claude Code sessions
 ```
 
-The root pubspec.yaml is a Dart workspace. A package joins the `workspace:` list when it gets code.
+The root pubspec.yaml is a Dart workspace. A package joins the `workspace:` list when it gets code. packages/larder_select stays out of the list on purpose: pub overrides a path dependency, never a workspace member.
 
 ## Stack
 
@@ -41,21 +42,25 @@ The root pubspec.yaml is a Dart workspace. A package joins the `workspace:` list
 ```
 dart pub get
 tool/gate.sh
+dart run site/tool/build.dart
 ```
 
-`LARDER=stub` is the default for the site build. `tool/stub_build_check.sh` clones the repo into a temp folder and runs the gate there, which is the test that a stranger can build it.
+`LARDER=stub` is the default. `tool/stub_build_check.sh` clones the repo into a temp folder and runs the gate there, which is the test that a stranger can build it. The site build runs Jaspr's CLI as a dev dependency (`dart run jaspr_cli:jaspr build`), never as a global tool, and writes site/build/jaspr.
 
 ## Build with the real core
 
-A gitignored `pubspec_overrides.yaml` at the repo root adds the private core as a path dependency:
-
 ```
-dependency_overrides:
-  larder_core:
-    path: ../larder/packages/core
+LARDER=sqlite LARDER_PATH=../larder dart run site/tool/build.dart
 ```
 
-Then `LARDER=sqlite dart pub get` and the site build reads larder/build/skullery.sqlite and copies larder/build/images/legacy into site/web/images/legacy (gitignored). Delete the override file to return to the stub. The override file and the two paths above are the only place this repo names the private core.
+The build tool writes a gitignored `pubspec_overrides.yaml` at the repo root that points `larder_select` at the private repo's package of that name (`../larder/packages/select`), which opens the parsed SQLite file through the real core, larder_core. It also copies the legacy images into site/web/images/legacy (gitignored). The stub build removes both. The override file, the two paths in this section and the README are the only places this repo names the private core. A pubspec.lock resolved with the override holds the private path; the leak check fails on it, so build with the stub before a commit.
+
+## Known constraints
+
+- Jaspr's CLI pins analyzer ^12, so `test` is 1.31.1 and build_web_compilers 4.8.5 across the workspace until Jaspr moves. One resolution per workspace.
+- jaspr_cli checks that `which dart` sits inside the SDK folder; the Homebrew symlink does not, so the build tool puts the running SDK's bin folder first on PATH for the CLI. It also sets JASPR_NO_COMPLETION so the CLI does not write shell completion files.
+- Routes carry no path parameters: static generation renders one route per page, so the router lists every recipe and lookup as its own route.
+- A static host serves /recipe/<slug> from recipe/<slug>/index.html; python's http.server answers the bare path with a 301 to the slash form.
 
 ## The pages of the site
 
@@ -71,5 +76,5 @@ recipe, chef (not author), kitchen (not cuisine or tag), category, meal, label, 
 
 ## Known gaps
 
-- No code yet in any package. The first code session adds larder_api, larder_stub and the site.
+- packages/ui and apps/ have no code yet.
 - No CI yet. The gate runs locally; CI comes with the first code (see docs/process-gaps.md).

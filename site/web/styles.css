@@ -1,0 +1,16 @@
+/* No design yet: system fonts, one column, readable on a phone. */
+:root { color-scheme: light dark; }
+html { font: 16px/1.5 system-ui, sans-serif; }
+body { margin: 0 auto; padding: 0 1rem 3rem; max-width: 42rem; }
+header nav ul, .lookups { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+header { padding: 1rem 0; border-bottom: 1px solid #8884; }
+main { padding: 1rem 0; }
+footer { border-top: 1px solid #8884; padding: 1rem 0; font-size: 0.875rem; }
+h1 { font-size: 1.75rem; line-height: 1.2; }
+img { max-width: 100%; height: auto; }
+.recipe-list { list-style: none; padding: 0; }
+.recipe-list li { padding: 0.5rem 0; border-bottom: 1px solid #8882; }
+.meta { font-size: 0.875rem; }
+.amount { font-variant-numeric: tabular-nums; }
+.unreviewed { display: inline-block; padding: 0.1rem 0.4rem; border: 1px solid #8888; border-radius: 0.25rem; font-size: 0.75rem; }
+.pager { display: flex; gap: 1rem; }
