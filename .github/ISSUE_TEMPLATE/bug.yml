@@ -1,6 +1,6 @@
 name: Bug
 description: Something does not work the way the repo says it does.
-labels: [bug]
+labels: [burnt]
 body:
   - type: textarea
     id: did
