@@ -1,6 +1,6 @@
 name: Idea
 description: One idea for the site, the apps or the interface.
-labels: [idea]
+labels: ["what if"]
 body:
   - type: textarea
     id: idea

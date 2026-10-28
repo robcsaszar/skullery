@@ -83,6 +83,10 @@ recipe, chef (not author), kitchen (not cuisine or tag), category, meal, label, 
 
 The Worker is assets only: site/wrangler.toml names it skullery-preview, points at site/build/jaspr and serves 404.html for a missing path. The account comes from the wrangler login in the home folder. No custom domain, no route on skullery.net. The build tool writes `_headers` with `X-Robots-Tag: noindex` on every path and removes what the Jaspr build leaves in the output that is not the site (.dart_tool, .build.manifest, packages/).
 
+## Board
+
+https://github.com/users/robcsaszar/projects/6. Work is tracked on the board. Facts live in the files.
+
 ## Known gaps
 
 - packages/ui and apps/ have no code yet.
