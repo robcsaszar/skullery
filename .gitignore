@@ -5,3 +5,6 @@ build/
 pubspec_overrides.yaml
 # Copied in for the real-core build of the site.
 site/web/images/legacy/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
