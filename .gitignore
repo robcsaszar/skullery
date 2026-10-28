@@ -10,3 +10,8 @@ site/lib/main.server.options.dart
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# wrangler: packages, local state and the gitignored vars file for the deploy.
+site/node_modules/
+site/.wrangler/
+site/.dev.vars

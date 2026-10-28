@@ -35,7 +35,8 @@ The root pubspec.yaml is a Dart workspace. A package joins the `workspace:` list
 - Jaspr, newest stable, static mode, through `dart run jaspr_cli:jaspr` as a dev dependency. jaspr_router for the routes.
 - Flutter for the apps, pinned per app pubspec.
 - Hosting: static site on Cloudflare Workers; dynamic calls to the larder host on Fly.io; database Turso (libSQL), behind the host, never reached from here; images on Cloudflare R2, served through the Worker; search with Pagefind over the built HTML.
-- No env file anywhere. The static build needs no secret. Deploy credentials live in the host's secret store and reach it through CI.
+- Node 26.10.0 with npm 11.19.1 (Homebrew), only for wrangler, pinned as a dev dependency in site/package.json with its package-lock.json. No global install.
+- No env file anywhere. The static build needs no secret. The site deploys from Rob's machine with `tool/deploy.sh`; the wrangler login token stays in the home folder and never in the repo. CI never deploys.
 
 ## Build with the stub core
 
@@ -74,7 +75,15 @@ The build tool writes a gitignored `pubspec_overrides.yaml` at the repo root tha
 
 recipe, chef (not author), kitchen (not cuisine or tag), category, meal, label, cook (not user), fork (not tweak or variant), version, change, place (the position of an entity: the id of the next sibling or "end", never an order number), ingredient, ingredient group, item, state, alternative, step, action, inputs, note, yield, larder.
 
+## Deploys
+
+| what | where | since | command |
+|---|---|---|---|
+| preview of the static site, real core, every page noindex | https://skullery-preview.nhg.workers.dev | 2026-10-28 | `LARDER_PATH=<path to the private repo> tool/deploy.sh` from the repo root, on Rob's machine |
+
+The Worker is assets only: site/wrangler.toml names it skullery-preview, points at site/build/jaspr and serves 404.html for a missing path. The account comes from the wrangler login in the home folder. No custom domain, no route on skullery.net. The build tool writes `_headers` with `X-Robots-Tag: noindex` on every path and removes what the Jaspr build leaves in the output that is not the site (.dart_tool, .build.manifest, packages/).
+
 ## Known gaps
 
 - packages/ui and apps/ have no code yet.
-- No deploy yet. The first is a preview of the static site on a workers.dev address, on a branch with a pull request. main is protected: pull request, the ci check, no force push, no deletion.
+- Only the preview is deployed; nothing on skullery.net. main is protected: pull request, the ci check, no force push, no deletion.

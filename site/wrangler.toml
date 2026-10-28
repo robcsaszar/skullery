@@ -1,0 +1,9 @@
+# Preview deploy of the static site to a workers.dev address. Assets only, no
+# worker script. The account comes from the wrangler login in the home folder,
+# never from this file. tool/deploy.sh at the repo root runs the deploy.
+name = "skullery-preview"
+compatibility_date = "2026-10-28"
+
+[assets]
+directory = "./build/jaspr"
+not_found_handling = "404-page"

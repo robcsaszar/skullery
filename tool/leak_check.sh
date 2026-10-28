@@ -19,7 +19,7 @@ while IFS= read -r f; do
   [ -f "$f" ] || continue
   base=$(basename "$f")
   case "$base" in
-    .env|.env.*|*.env|*.pem|*.key|*.p12|*.pfx|id_rsa|id_ed25519|*.keystore|credentials.json|service-account*.json)
+    .env|.env.*|*.env|.dev.vars|*.pem|*.key|*.p12|*.pfx|id_rsa|id_ed25519|*.keystore|credentials.json|service-account*.json)
       say "$f: env or key file name" ;;
   esac
   case "$f" in
